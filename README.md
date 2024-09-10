@@ -1,37 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ENS Lookup & Registration DApp
+
+This decentralized application (DApp) allows users to easily look up and register Ethereum Name Service (ENS) domains. Users can connect their wallets, check the availability of `.eth` domains, and register new domains through a secure commit-reveal process. The application is built using **Next.js**, **web3.js**, **NextUI**, and **ethers.js**, and is deployed on **[Fleek](https://fleek.xyz/)**, ensuring a decentralized and seamless deployment experience.
+
+### 🚀 **Live Demo: [ENS Lookup & Registration](https://your-fleek-url.fleek.co/)**
+
+---
+
+## Features
+- 🔍 **ENS Lookup**: Easily search for any `.eth` domain to check its availability and resolve it to an Ethereum address.
+- 📝 **ENS Registration**: Register available ENS domains using the secure commit-reveal process to prevent front-running.
+- 🔐 **MetaMask Integration**: Connect your wallet via MetaMask to interact with Ethereum smart contracts.
+- ⚡ **Fleek Deployment**: The DApp is deployed on [Fleek](https://fleek.xyz/), leveraging decentralized hosting powered by IPFS.
+- 🎨 **Modern UI**: Clean and responsive design built with **NextUI** for an intuitive user experience.
+
+---
+
+## Technologies Used
+- **Next.js**: React framework for building fast and modern web applications.
+- **web3.js**: Ethereum JavaScript API for interacting with smart contracts.
+- **ethers.js**: Library for wallet management and generating secrets during ENS registration.
+- **NextUI**: Elegant and fast UI components for a smooth user interface.
+- **Fleek**: Decentralized hosting platform, powered by IPFS and Ethereum.
+
+---
+
+## How It Works
+
+### ENS Lookup
+- Users can enter any `.eth` domain (e.g., `myname.eth`) in the search bar.
+- The app will check the availability of the domain using the `ETHRegistrarController` contract.
+
+### ENS Registration
+- If a domain is available, users can initiate the registration process, which consists of:
+  1. **Commitment**: The user makes a commitment to register the domain, which is submitted on-chain to prevent front-running.
+  2. **Waiting Period**: ENS requires a waiting period of at least 60 seconds after commitment.
+  3. **Registration**: Once the waiting period is over, the user can complete the registration of their domain.
+
+### MetaMask Integration
+- The app integrates MetaMask to allow users to connect their wallets, view their Ethereum address, and make transactions securely.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- **Node.js** (v14+)
+- **MetaMask** extension installed in your browser
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# ENS_safari
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/ens-lookup-registration.git
+   cd ens-lookup-registration
