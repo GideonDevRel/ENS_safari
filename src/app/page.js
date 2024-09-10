@@ -1,101 +1,158 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useEffect } from 'react';
+import Web3 from 'web3';
+import { NextUIProvider, Button, Input, Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, RadioGroup, Radio } from "@nextui-org/react";
+import { Search, Edit3 } from 'lucide-react'; // Ensure lucide-react icons are correctly imported
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [ensName, setEnsName] = useState('');
+  const [lookupResult, setLookupResult] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [account, setAccount] = useState(null);
+  const [web3, setWeb3] = useState(null);
+  const [scrollBehavior, setScrollBehavior] = useState("inside"); // Added scroll behavior state
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    if (window.ethereum) {
+      const web3Instance = new Web3(window.ethereum);
+      setWeb3(web3Instance);
+    } else {
+      alert("Please install MetaMask to use this feature.");
+    }
+  }, []);
+
+  const connectWallet = async () => {
+    if (web3) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setAccount(accounts[0]);
+      } catch (error) {
+        console.error("Failed to connect wallet", error);
+      }
+    }
+  };
+
+  const handleLookup = async () => {
+    if (!web3 || !ensName.trim()) return;
+    setLoading(true);
+    try {
+      const address = await web3.eth.ens.getAddress(ensName);
+      setLookupResult(`Address for ${ensName}: ${address}`);
+    } catch (error) {
+      setLookupResult("ENS name not found or an error occurred.");
+    }
+    setLoading(false);
+  };
+
+  const handleRegister = () => {
+    onOpen(); // Opens the modal using onOpen function
+  };
+
+  return (
+    <NextUIProvider>
+      <div className="flex flex-col justify-between min-h-screen p-8 pb-20 bg-gray-100">
+        <header className="w-full max-w-4xl mx-auto">
+          <nav className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl font-bold text-gray-800">ENS Lookup</span>
+            </div>
+            {account ? (
+              <Button color="primary" variant="ghost">{`Connected: ${account.substring(0, 6)}...${account.substring(account.length - 4)}`}</Button>
+            ) : (
+              <Button color="primary" variant="ghost" onClick={connectWallet}>Connect Wallet</Button>
+            )}
+          </nav>
+        </header>
+
+        <main className="w-full max-w-4xl mx-auto space-y-12">
+          <section className="space-y-4 text-center">
+            <h1 className="text-4xl font-bold text-gray-800 sm:text-5xl">Discover Your Ethereum Identity</h1>
+            <p className="text-xl text-gray-600">Look up and register your unique Ethereum Name Service domain</p>
+          </section>
+
+          <Card className="p-8 bg-white shadow-lg rounded-xl">
+            <CardBody className="space-y-6">
+              <div className="flex space-x-4">
+                <Input
+                  clearable
+                  bordered
+                  fullWidth
+                  color="primary"
+                  size="lg"
+                  placeholder="Enter ENS name"
+                  value={ensName}
+                  onChange={(e) => setEnsName(e.target.value)}
+                />
+                <Button color="primary" onClick={handleLookup} disabled={loading} isLoading={loading} auto>
+                  Lookup
+                </Button>
+              </div>
+              {lookupResult && (
+                <p style={{ padding: '10px', color: 'green' }}>{lookupResult}</p>
+              )}
+              <Button color="success" onClick={handleRegister} auto>
+                <Edit3 className="w-4 h-4 mr-2" /> Register Domain
+              </Button>
+            </CardBody>
+          </Card>
+        </main>
+
+        {/* Scroll Behavior Selection */}
+        <div className="flex flex-col gap-2">
+          <RadioGroup
+            label="Select scroll behavior"
+            orientation="horizontal"
+            value={scrollBehavior}
+            onValueChange={setScrollBehavior}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <Radio value="inside">inside</Radio>
+            <Radio value="outside">outside</Radio>
+          </RadioGroup>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* Modal */}
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior={scrollBehavior}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Register ENS Domain
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="lg"
+                    placeholder="Enter ENS name for registration"
+                    value={ensName}
+                    onChange={(e) => setEnsName(e.target.value)}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button color="primary" onPress={() => {
+                    alert(`Registering ${ensName}`);
+                    onClose();
+                  }}>
+                    Register
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+
+        <footer className="w-full max-w-4xl mx-auto text-center text-gray-600">
+          <p>&copy; 2023 ENS Lookup. All rights reserved.</p>
+        </footer>
+      </div>
+    </NextUIProvider>
   );
 }
