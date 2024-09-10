@@ -2,7 +2,7 @@
 
 This decentralized application (DApp) allows users to easily look up and register Ethereum Name Service (ENS) domains. Users can connect their wallets, check the availability of `.eth` domains, and register new domains through a secure commit-reveal process. The application is built using **Next.js**, **web3.js**, **NextUI**, and **ethers.js**, and is deployed on **[Fleek](https://fleek.xyz/)**, ensuring a decentralized and seamless deployment experience.
 
-### 🚀 **Live Demo: [ENS Lookup & Registration](https://your-fleek-url.fleek.co/)**
+### 🚀 **Live Demo: [ENS Lookup & Registration](https://fleek.xyz/)**
 
 ---
 
@@ -18,7 +18,6 @@ This decentralized application (DApp) allows users to easily look up and registe
 ## Technologies Used
 - **Next.js**: React framework for building fast and modern web applications.
 - **web3.js**: Ethereum JavaScript API for interacting with smart contracts.
-- **ethers.js**: Library for wallet management and generating secrets during ENS registration.
 - **NextUI**: Elegant and fast UI components for a smooth user interface.
 - **Fleek**: Decentralized hosting platform, powered by IPFS and Ethereum.
 
@@ -36,19 +35,16 @@ This decentralized application (DApp) allows users to easily look up and registe
   2. **Waiting Period**: ENS requires a waiting period of at least 60 seconds after commitment.
   3. **Registration**: Once the waiting period is over, the user can complete the registration of their domain.
 
-### MetaMask Integration
-- The app integrates MetaMask to allow users to connect their wallets, view their Ethereum address, and make transactions securely.
-
 ---
 
 ## Getting Started
 
 ### Prerequisites
-- **Node.js** (v14+)
-- **MetaMask** extension installed in your browser
+- **Node.js** (v18+)
 
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ens-lookup-registration.git
-   cd ens-lookup-registration
+   git clone https://github.com/maogagideon/ENS_safari.git
+   cd ENS_Safari
+
